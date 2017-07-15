@@ -25,17 +25,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             jamPesan = (TextView)view.findViewById(R.id.jam_pesan);
             noTelp = (TextView)view.findViewById(R.id.no_telp);
 
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(context, DetailActivity.class);
-//                    intent.putExtra("namaTm",arrayTempatMakan.get(getAdapterPosition()).getNamaTm());
-//                    intent.putExtra("id",Integer.toString(arrayTempatMakan.get(getAdapterPosition()).getIdTm()));
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    context.startActivity(intent);
-//                }
-//            });
-
         }
     }
 
