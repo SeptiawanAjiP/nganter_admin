@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="blok">#93d2ca</color>
+    <color name="red">#ff4040</color>
+    <color name="kuning">#ffff66</color>
 </resources>

@@ -13,8 +13,10 @@ public class Order {
     private String lokasiAntar;
     private String waktuPesan;
     private String kategori;
+    private String status;
+    private String info;
 
-    public Order(String idOrder,String namaPemesan,String pesanan,String jamAntar,String noTelp,String lokasiAntar,String waktuPesan){
+    public Order(String idOrder,String namaPemesan,String pesanan,String jamAntar,String noTelp,String lokasiAntar,String waktuPesan,String status,String info){
         this.idOrder = idOrder;
         this.namaPemesan = namaPemesan;
         this.pesanan = pesanan;
@@ -22,6 +24,8 @@ public class Order {
         this.noTelp = noTelp;
         this.lokasiAntar = lokasiAntar;
         this.waktuPesan = waktuPesan;
+        this.setStatus(status);
+        this.info = info;
     }
     public String getIdOrder() {
         return idOrder;
@@ -85,5 +89,21 @@ public class Order {
 
     public void setKategori(String kategori) {
         this.kategori = kategori;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

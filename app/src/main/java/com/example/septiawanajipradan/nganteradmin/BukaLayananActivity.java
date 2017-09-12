@@ -1,7 +1,9 @@
 package com.example.septiawanajipradan.nganteradmin;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -38,7 +41,12 @@ public class BukaLayananActivity extends AppCompatActivity {
         aktif = (RelativeLayout)findViewById(R.id.rl_buka_layanan);
         aktif.setVisibility(View.GONE);
         keterangan = (TextView)findViewById(R.id.keterangan);
-        cekBukaTutup();
+        if(adaKoneksi()){
+            cekBukaTutup();
+        }else{
+            Toast.makeText(this, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void cekBukaTutup(){
@@ -132,5 +140,9 @@ public class BukaLayananActivity extends AppCompatActivity {
             }
         };
         AppContoller.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+    public boolean adaKoneksi() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

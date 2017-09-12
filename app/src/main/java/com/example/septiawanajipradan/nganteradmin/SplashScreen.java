@@ -23,6 +23,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private View mTarget;
 
+    private SessionManager sessionManager;
     private HashMap<String,String> tempatMakanHashmapFavorit;
 
 //    private SessionManager sm;
@@ -31,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         queue = Volley.newRequestQueue(getApplicationContext());
+        sessionManager = new SessionManager(getApplicationContext());
         startAnimation();
     }
 
@@ -45,9 +47,15 @@ public class SplashScreen extends AppCompatActivity {
             public void run(){
                 try{
                     sleep(2000);
-                    Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(sessionManager.getFirst()!=null){
+                        Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }

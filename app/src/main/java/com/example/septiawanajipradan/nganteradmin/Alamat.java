@@ -5,5 +5,5 @@ package com.example.septiawanajipradan.nganteradmin;
  */
 
 public class Alamat {
-    public static final String ALAMT_SERVER = "https://predicant-nod.000webhostapp.com/nganter/koneksi.php";
+    public static final String ALAMT_SERVER = "http://nganter.com/applic/koneksi.php";
 }
