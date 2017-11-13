@@ -23,7 +23,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     private Activity activity;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView idOrder,namaPemesan,jamPesan,noTelp;
+        public TextView idOrder,namaPemesan,jamPesan,noTelp,sedang;
         public CardView cardView;
         public MyViewHolder(View view){
             super(view);
@@ -33,7 +33,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             jamPesan = (TextView)view.findViewById(R.id.jam_pesan);
             noTelp = (TextView)view.findViewById(R.id.no_telp);
             cardView = (CardView) view.findViewById(R.id.card);
-
+            sedang = (TextView)view.findViewById(R.id.sedang_diproses);
 
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -74,10 +74,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         holder.noTelp.setText(order.getNoTelp());
         if(arrayOrder.get(position).getStatus().equals("ambil")){
             holder.cardView.setCardBackgroundColor(Color.YELLOW);
+            holder.sedang.setVisibility(View.VISIBLE);
+            holder.sedang.setText("sedang diproses");
         }else if(arrayOrder.get(position).getStatus().equals("tolak")){
             holder.cardView.setCardBackgroundColor(Color.RED);
-        }else{
+            holder.sedang.setVisibility(View.VISIBLE);
+            holder.sedang.setText("ditolak");
+        }else if(arrayOrder.get(position).getStatus().equals("antri")){
             holder.cardView.setCardBackgroundColor(Color.WHITE);
+        }else if(arrayOrder.get(position).getStatus().equals("selesai")){
+            holder.cardView.setCardBackgroundColor(Color.BLUE);
+            holder.sedang.setVisibility(View.VISIBLE);
+            holder.sedang.setText("selesai");
         }
 
     }
@@ -86,6 +94,5 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     public int getItemCount() {
         return arrayOrder.size();
     }
-
 
 }

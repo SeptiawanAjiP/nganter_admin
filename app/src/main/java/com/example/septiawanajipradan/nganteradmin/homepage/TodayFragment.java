@@ -1,27 +1,26 @@
-package com.example.septiawanajipradan.nganteradmin;
+package com.example.septiawanajipradan.nganteradmin.homepage;
 
-import android.app.Notification;
+import android.app.Fragment;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +29,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.septiawanajipradan.nganteradmin.Alamat;
+import com.example.septiawanajipradan.nganteradmin.AppContoller;
+import com.example.septiawanajipradan.nganteradmin.CekKoneksi;
+import com.example.septiawanajipradan.nganteradmin.LoginActivity;
+import com.example.septiawanajipradan.nganteradmin.Order;
+import com.example.septiawanajipradan.nganteradmin.OrderAdapter;
+import com.example.septiawanajipradan.nganteradmin.R;
+import com.example.septiawanajipradan.nganteradmin.SessionManager;
+import com.example.septiawanajipradan.nganteradmin.SplashScreen;
+import com.example.septiawanajipradan.nganteradmin.homepage.HomePageActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,10 +48,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Septiawan Aji Pradan on 7/14/2017.
+ * Created by aji on 11/13/2017.
  */
 
-public class OrderActivity extends AppCompatActivity{
+public class TodayFragment extends android.support.v4.app.Fragment {
     private TextView tanggaltv;
     private RecyclerView order;
     private OrderAdapter orderAdapter;
@@ -52,12 +61,14 @@ public class OrderActivity extends AppCompatActivity{
     private SessionManager sessionManager;
     Handler mHandler;
     Runnable runnable;
+    private View view;
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.order_activity);
-        tanggaltv = (TextView)findViewById(R.id._tanggal);
-        order = (RecyclerView)findViewById(R.id.recycler_order);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.order_activity,container,false);
+        tanggaltv = (TextView)view.findViewById(R.id._tanggal);
+        order = (RecyclerView)view.findViewById(R.id.recycler_order);
         mHandler = new Handler();
 
         tanggaltv.setOnClickListener(new View.OnClickListener() {
@@ -67,18 +78,20 @@ public class OrderActivity extends AppCompatActivity{
             }
         });
 
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = new SessionManager(getContext());
         sessionManager.setFirst();
         if(sessionManager.getFirst()==null){
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(intent);
-            finish();
+            Intent intent = new Intent(getActivity(),LoginActivity.class);
+            getActivity().startActivity(intent);
+            getActivity().finish();
         }
         arrayOrder = new ArrayList<>();
         totalBefore=0;
         monitoring();
-    }
 
+        return view;
+
+    }
 
     public void getData(){
         arrayOrder.clear();
@@ -131,14 +144,14 @@ public class OrderActivity extends AppCompatActivity{
                 return map;
             }
         };
-        AppContoller.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        AppContoller.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
     public void orderList(ArrayList<Order> arrayOrder){
         Log.d("__order_4",arrayOrder.toString());
-        orderAdapter = new OrderAdapter(arrayOrder,OrderActivity.this);
+        orderAdapter = new OrderAdapter(arrayOrder,getActivity());
         orderAdapter.notifyDataSetChanged();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         order.setLayoutManager(layoutManager);
         order.setItemAnimator(new DefaultItemAnimator());
         order.setAdapter(orderAdapter);
@@ -147,22 +160,22 @@ public class OrderActivity extends AppCompatActivity{
 
     private void addNotification() {
         android.support.v4.app.NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(getActivity())
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle("Pesanan Baru")
 //                        .setSound(Uri.parse("android.resource://"
 //                                + getApplicationContext().getPackageName() + "/" + R.raw.bell.mp3))
                         .setContentText("Ada pesanan baru, segera cek");
 
-        Intent notificationIntent = new Intent(this, OrderActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+        Intent notificationIntent = new Intent(getActivity(), HomePageActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
 //        builder.setDefaults(Notification.DEFAULT_SOUND);
 
         // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(),R.raw.bell);
+        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        MediaPlayer mp = MediaPlayer.create(getContext(),R.raw.bell);
         mp.start();
         manager.notify(0, builder.build());
     }
@@ -172,12 +185,7 @@ public class OrderActivity extends AppCompatActivity{
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(adaKoneksi()){
-                    getData();
-                }else{
-                    Toast.makeText(OrderActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
-                }
-
+                getData();
 
                 mHandler.postDelayed(this, 10000);
             }
@@ -196,7 +204,7 @@ public class OrderActivity extends AppCompatActivity{
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     status = jsonObject.getString("status");
                     if(status.equals("tutup")){
-                        Toast.makeText(OrderActivity.this, "Layanan telah ditutup", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Layanan telah ditutup", Toast.LENGTH_SHORT).show();
                     }else{
 
                     }
@@ -218,43 +226,30 @@ public class OrderActivity extends AppCompatActivity{
                 return map;
             }
         };
-        AppContoller.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        AppContoller.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_utama, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getActivity().getMenuInflater();
+//        inflater.inflate(R.menu.menu_utama, menu);
+//        return true;
+//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.logout){
-            if(adaKoneksi()){
+            if(CekKoneksi.CekKoneksi(getContext())){
                 upadateBukaTutup();
-                Intent intent = new Intent(OrderActivity.this,SplashScreen.class);
+                Intent intent = new Intent(getActivity(),SplashScreen.class);
                 startActivity(intent);
                 sessionManager.delete();
-                finish();
+                getActivity().finish();
             }else{
-                Toast.makeText(OrderActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
             }
 
         }
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    public boolean adaKoneksi() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
-    }
-
-
 }
-

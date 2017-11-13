@@ -141,8 +141,38 @@ public class DetailPesananDialog extends Dialog {
                                 }
                             }).create();
                     dialog.show();
-                }else{
-                    Toast.makeText(activity, "Pesanan Sudah dieksekusi", Toast.LENGTH_SHORT).show();
+                }else if(order.getStatus().equals("ambil")){
+                    final String[] pilihan = {"Order selesai","Order Batal"};
+                    def = 0;
+                    AlertDialog dialog = new AlertDialog.Builder(activity)
+                            .setTitle("Pilih Proses")
+                            .setSingleChoiceItems(pilihan, 0,  new OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    def = which;
+                                }
+                            })
+                            .setPositiveButton("Pilih", new OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(def==0){
+                                        if (adaKoneksi()){
+                                            orderSelesai(order.getIdOrder());
+                                        }else{
+                                            Toast.makeText(activity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }else if(def==1){
+                                        DialogAlasanDitolak dialogAlasanDitolak = new DialogAlasanDitolak(activity,order.getIdOrder());
+                                        dialogAlasanDitolak.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        dialogAlasanDitolak.show();
+                                        dismiss();
+                                    }
+                                }
+                            }).create();
+                    dialog.show();
+                }else if(order.getStatus().equals("tolak")){
+                    Toast.makeText(activity, "Pesanan telah ditolak", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,6 +203,40 @@ public class DetailPesananDialog extends Dialog {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
                 map.put("kode","admin_ambil_pesanan");
+                map.put("id_order",idOrder);
+                return map;
+            }
+        };
+        AppContoller.getInstance(activity.getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+    public void orderSelesai(final String idOrder){
+        Log.d("__JU",idOrder);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Alamat.ALAMT_SERVER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject  jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("status").equals("1")){
+                        dismiss();
+                        Toast.makeText(activity, "Order Selesai", Toast.LENGTH_SHORT).show();
+                        Log.d("ajari0",response.toString());
+                    }
+
+                }catch (Exception e){
+                    Log.d("ajari",e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("kode","job_selesai");
                 map.put("id_order",idOrder);
                 return map;
             }

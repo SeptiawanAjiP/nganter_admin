@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.septiawanajipradan.nganteradmin.homepage.HomePageActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,11 +49,13 @@ public class SplashScreen extends AppCompatActivity {
                 try{
                     sleep(2000);
                     if(sessionManager.getFirst()!=null){
-                        Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
+//                        Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
                         startActivity(intent);
                         finish();
                     }else{
-                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+//                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
                         startActivity(intent);
                         finish();
                     }
