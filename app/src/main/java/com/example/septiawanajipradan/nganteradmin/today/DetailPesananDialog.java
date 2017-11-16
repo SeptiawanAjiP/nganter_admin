@@ -1,4 +1,4 @@
-package com.example.septiawanajipradan.nganteradmin;
+package com.example.septiawanajipradan.nganteradmin.today;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,8 +27,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ClearCacheRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.septiawanajipradan.nganteradmin.helper.Alamat;
+import com.example.septiawanajipradan.nganteradmin.helper.AppContoller;
+import com.example.septiawanajipradan.nganteradmin.Order;
+import com.example.septiawanajipradan.nganteradmin.R;
 
 import org.json.JSONObject;
 
@@ -51,13 +54,17 @@ public class DetailPesananDialog extends Dialog {
     int def;
     ProgressDialog progressDialog;
 
+    public static final String HISTORY = "history";
+    public static final String TODAY = "today";
+
     String pesanan;
     clearArray clear;
-
-    public DetailPesananDialog(Activity activity,Order order){
+    private String flag;
+    public DetailPesananDialog(Activity activity,Order order,String flag){
         super(activity);
         this.activity = activity;
         this.order = order;
+        this.flag = flag;
     }
 
     @Override
@@ -103,7 +110,7 @@ public class DetailPesananDialog extends Dialog {
                 }else if (order.getStatus().equals("antri")){
                     openWhatsApp(order.getNoTelp());
                 }else{
-                    Toast.makeText(activity, "Pesanan Sudah dibatalkan", Toast.LENGTH_SHORT).show();
+                    openWhatsApp(order.getNoTelp());
                 }
             }
         });
@@ -111,69 +118,74 @@ public class DetailPesananDialog extends Dialog {
         eksekusi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(order.getStatus().equals("antri")){
-                    final String[] pilihan = {"Terima","Tolak"};
-                    def = 0;
-                    AlertDialog dialog = new AlertDialog.Builder(activity)
-                            .setTitle("Pilih Proses")
-                            .setSingleChoiceItems(pilihan, 0,  new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    def = which;
-                                }
-                            })
-                            .setPositiveButton("Pilih", new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if(def==0){
-                                        if (adaKoneksi()){
-                                            shareMedia(order.getIdOrder());
-                                        }else{
-                                            Toast.makeText(activity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    }else if(def==1){
-                                        DialogAlasanDitolak dialogAlasanDitolak = new DialogAlasanDitolak(activity,order.getIdOrder());
-                                        dialogAlasanDitolak.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        dialogAlasanDitolak.show();
-                                        dismiss();
+                if(flag.equals(TODAY)){
+                    if(order.getStatus().equals("antri")){
+                        final String[] pilihan = {"Terima","Tolak"};
+                        def = 0;
+                        AlertDialog dialog = new AlertDialog.Builder(activity)
+                                .setTitle("Pilih Proses")
+                                .setSingleChoiceItems(pilihan, 0,  new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        def = which;
                                     }
-                                }
-                            }).create();
-                    dialog.show();
-                }else if(order.getStatus().equals("ambil")){
-                    final String[] pilihan = {"Order selesai","Order Batal"};
-                    def = 0;
-                    AlertDialog dialog = new AlertDialog.Builder(activity)
-                            .setTitle("Pilih Proses")
-                            .setSingleChoiceItems(pilihan, 0,  new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    def = which;
-                                }
-                            })
-                            .setPositiveButton("Pilih", new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if(def==0){
-                                        if (adaKoneksi()){
-                                            orderSelesai(order.getIdOrder());
-                                        }else{
-                                            Toast.makeText(activity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
-                                        }
+                                })
+                                .setPositiveButton("Pilih", new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(def==0){
+                                            if (adaKoneksi()){
+                                                shareMedia(order.getIdOrder());
+                                            }else{
+                                                Toast.makeText(activity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                    }else if(def==1){
-                                        DialogAlasanDitolak dialogAlasanDitolak = new DialogAlasanDitolak(activity,order.getIdOrder());
-                                        dialogAlasanDitolak.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        dialogAlasanDitolak.show();
-                                        dismiss();
+                                        }else if(def==1){
+                                            DialogAlasanDitolak dialogAlasanDitolak = new DialogAlasanDitolak(activity,order.getIdOrder());
+                                            dialogAlasanDitolak.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            dialogAlasanDitolak.show();
+                                            dismiss();
+                                        }
                                     }
-                                }
-                            }).create();
-                    dialog.show();
-                }else if(order.getStatus().equals("tolak")){
-                    Toast.makeText(activity, "Pesanan telah ditolak", Toast.LENGTH_SHORT).show();
+                                }).create();
+                        dialog.show();
+                    }else if(order.getStatus().equals("ambil")){
+                        final String[] pilihan = {"Order selesai","Order Batal"};
+                        def = 0;
+                        AlertDialog dialog = new AlertDialog.Builder(activity)
+                                .setTitle("Pilih Proses")
+                                .setSingleChoiceItems(pilihan, 0,  new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        def = which;
+                                    }
+                                })
+                                .setPositiveButton("Pilih", new OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(def==0){
+                                            if (adaKoneksi()){
+                                                orderSelesai(order.getIdOrder());
+                                            }else{
+                                                Toast.makeText(activity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }else if(def==1){
+                                            DialogAlasanDitolak dialogAlasanDitolak = new DialogAlasanDitolak(activity,order.getIdOrder());
+                                            dialogAlasanDitolak.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            dialogAlasanDitolak.show();
+                                            dismiss();
+                                        }
+                                    }
+                                }).create();
+                        dialog.show();
+                    }else if(order.getStatus().equals("tolak")){
+                        Toast.makeText(activity, "Pesanan telah ditolak", Toast.LENGTH_SHORT).show();
+                    }
+                }else if(flag.equals(HISTORY)){
+                    Toast.makeText(activity, "Orderan sudah berlalu", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }

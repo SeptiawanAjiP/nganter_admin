@@ -3,9 +3,11 @@ package com.example.septiawanajipradan.nganteradmin.homepage;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.example.septiawanajipradan.nganteradmin.R;
+import com.example.septiawanajipradan.nganteradmin.akun.AkunFragment;
+import com.example.septiawanajipradan.nganteradmin.history.HistoryFragment;
+import com.example.septiawanajipradan.nganteradmin.today.TodayFragment;
 import com.ss.bottomnavigation.BottomNavigation;
 import com.ss.bottomnavigation.events.OnSelectedItemChangeListener;
 
@@ -32,11 +34,13 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
                     case R.id.tab_images:
                         transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_fragment_containers,new FragmentA());
+                        transaction.replace(R.id.frame_fragment_containers,new HistoryFragment());
                         transaction.commit();
                         break;
                     case R.id.tab_camera:
-                        Toast.makeText(HomePageActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                        transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_fragment_containers,new AkunFragment());
+                        transaction.commit();
                         break;
                 }
 

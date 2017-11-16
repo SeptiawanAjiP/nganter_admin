@@ -17,7 +17,8 @@
         app:cardCornerRadius="4dp">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_bg">
             <RelativeLayout
                 android:layout_width="60dp"
                 android:layout_height="60dp"

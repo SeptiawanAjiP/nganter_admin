@@ -1,12 +1,10 @@
-package com.example.septiawanajipradan.nganteradmin.homepage;
+package com.example.septiawanajipradan.nganteradmin.today;
 
-import android.app.Fragment;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,8 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +25,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.septiawanajipradan.nganteradmin.Alamat;
-import com.example.septiawanajipradan.nganteradmin.AppContoller;
-import com.example.septiawanajipradan.nganteradmin.CekKoneksi;
+import com.example.septiawanajipradan.nganteradmin.helper.Alamat;
+import com.example.septiawanajipradan.nganteradmin.helper.AppContoller;
+import com.example.septiawanajipradan.nganteradmin.helper.CekKoneksi;
 import com.example.septiawanajipradan.nganteradmin.LoginActivity;
 import com.example.septiawanajipradan.nganteradmin.Order;
-import com.example.septiawanajipradan.nganteradmin.OrderAdapter;
-import com.example.septiawanajipradan.nganteradmin.R;
-import com.example.septiawanajipradan.nganteradmin.SessionManager;
-import com.example.septiawanajipradan.nganteradmin.SplashScreen;
 import com.example.septiawanajipradan.nganteradmin.homepage.HomePageActivity;
+import com.example.septiawanajipradan.nganteradmin.today.TodayAdapter;
+import com.example.septiawanajipradan.nganteradmin.R;
+import com.example.septiawanajipradan.nganteradmin.helper.SessionManager;
+import com.example.septiawanajipradan.nganteradmin.SplashScreen;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,9 +48,9 @@ import java.util.Map;
  */
 
 public class TodayFragment extends android.support.v4.app.Fragment {
-    private TextView tanggaltv;
+    private TextView tanggaltv,noOrder;
     private RecyclerView order;
-    private OrderAdapter orderAdapter;
+    private TodayAdapter todayAdapter;
     private ArrayList<Order> arrayOrder;
     String status;
     int totalBefore,totalAfter;
@@ -66,9 +62,10 @@ public class TodayFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.order_activity,container,false);
+        view = inflater.inflate(R.layout.today_fragment,container,false);
         tanggaltv = (TextView)view.findViewById(R.id._tanggal);
         order = (RecyclerView)view.findViewById(R.id.recycler_order);
+        noOrder = (TextView)view.findViewById(R.id.no_order_today);
         mHandler = new Handler();
 
         tanggaltv.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +119,7 @@ public class TodayFragment extends android.support.v4.app.Fragment {
 
                     if(totalBefore!=jsonArray.length()){
                         addNotification();
+
                     }
                     totalBefore = jsonArray.length();
 
@@ -148,13 +146,19 @@ public class TodayFragment extends android.support.v4.app.Fragment {
     }
 
     public void orderList(ArrayList<Order> arrayOrder){
-        Log.d("__order_4",arrayOrder.toString());
-        orderAdapter = new OrderAdapter(arrayOrder,getActivity());
-        orderAdapter.notifyDataSetChanged();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        order.setLayoutManager(layoutManager);
-        order.setItemAnimator(new DefaultItemAnimator());
-        order.setAdapter(orderAdapter);
+        if(arrayOrder.size()==0){
+            noOrder.setVisibility(View.VISIBLE);
+            order.setVisibility(View.GONE);
+        }else{
+            Log.d("__order_4",arrayOrder.toString());
+            todayAdapter = new TodayAdapter(arrayOrder,getActivity());
+            todayAdapter.notifyDataSetChanged();
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+            order.setLayoutManager(layoutManager);
+            order.setItemAnimator(new DefaultItemAnimator());
+            order.setAdapter(todayAdapter);
+        }
+
 
     }
 

@@ -32,8 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:tab_text="Rating"
-            app:tab_icon="@drawable/ic_star_black_24dp"
+            app:tab_text="Account"
+            app:tab_icon="@drawable/ic_person_24dp"
             />
 
     </com.ss.bottomnavigation.BottomNavigation>

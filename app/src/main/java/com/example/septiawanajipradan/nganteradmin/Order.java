@@ -15,7 +15,12 @@ public class Order {
     private String kategori;
     private String status;
     private String info;
+    private String rating;
+    private String saran;
 
+    public Order(){
+
+    }
     public Order(String idOrder,String namaPemesan,String pesanan,String jamAntar,String noTelp,String lokasiAntar,String waktuPesan,String status,String info){
         this.idOrder = idOrder;
         this.namaPemesan = namaPemesan;
@@ -105,5 +110,21 @@ public class Order {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getSaran() {
+        return saran;
+    }
+
+    public void setSaran(String saran) {
+        this.saran = saran;
     }
 }

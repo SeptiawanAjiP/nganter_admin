@@ -1,13 +1,11 @@
 package com.example.septiawanajipradan.nganteradmin;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +27,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.septiawanajipradan.nganteradmin.helper.Alamat;
+import com.example.septiawanajipradan.nganteradmin.helper.AppContoller;
+import com.example.septiawanajipradan.nganteradmin.helper.SessionManager;
+import com.example.septiawanajipradan.nganteradmin.today.TodayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ import java.util.Map;
 public class OrderActivity extends AppCompatActivity{
     private TextView tanggaltv;
     private RecyclerView order;
-    private OrderAdapter orderAdapter;
+    private TodayAdapter todayAdapter;
     private ArrayList<Order> arrayOrder;
     String status;
     int totalBefore,totalAfter;
@@ -55,7 +56,7 @@ public class OrderActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.order_activity);
+        setContentView(R.layout.today_fragment);
         tanggaltv = (TextView)findViewById(R.id._tanggal);
         order = (RecyclerView)findViewById(R.id.recycler_order);
         mHandler = new Handler();
@@ -136,12 +137,12 @@ public class OrderActivity extends AppCompatActivity{
 
     public void orderList(ArrayList<Order> arrayOrder){
         Log.d("__order_4",arrayOrder.toString());
-        orderAdapter = new OrderAdapter(arrayOrder,OrderActivity.this);
-        orderAdapter.notifyDataSetChanged();
+        todayAdapter = new TodayAdapter(arrayOrder,OrderActivity.this);
+        todayAdapter.notifyDataSetChanged();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         order.setLayoutManager(layoutManager);
         order.setItemAnimator(new DefaultItemAnimator());
-        order.setAdapter(orderAdapter);
+        order.setAdapter(todayAdapter);
 
     }
 
