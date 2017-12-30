@@ -50,13 +50,11 @@ public class SplashScreen extends AppCompatActivity {
                 try{
                     sleep(2000);
                     if(sessionManager.getFirst()!=null){
-//                        Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
-                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),BukaLayananActivity.class);
                         startActivity(intent);
                         finish();
                     }else{
-//                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }

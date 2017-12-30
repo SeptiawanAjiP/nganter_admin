@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(username.getText().toString().equals("nganter")&&password.getText().toString().equals("nganterbarang")){
+                if(username.getText().toString().equals("nganter")&&password.getText().toString().equals("nganter.com")){
                     Intent intent = new Intent(LoginActivity.this,BukaLayananActivity.class);
                     startActivity(intent);
                     finish();

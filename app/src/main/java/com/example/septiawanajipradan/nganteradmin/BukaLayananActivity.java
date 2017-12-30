@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.septiawanajipradan.nganteradmin.helper.Alamat;
 import com.example.septiawanajipradan.nganteradmin.helper.AppContoller;
+import com.example.septiawanajipradan.nganteradmin.homepage.HomePageActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,14 +70,14 @@ public class BukaLayananActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 upadateBukaTutup();
-                                Intent intent = new Intent(getApplicationContext(),OrderActivity.class);
+                                Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
                         });
                     }else{
                         progressDialog.dismiss();
-                        Intent intent = new Intent(getApplicationContext(),OrderActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),HomePageActivity.class);
                         startActivity(intent);
                         finish();
                     }
